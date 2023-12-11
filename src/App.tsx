@@ -1,35 +1,81 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+import { FC } from 'react';
+interface AppProps {
+  // Define your props here
 }
 
-export default App
+export const App: FC<AppProps> = () => {
+  return (
+    <div className="container">
+      <h3>
+        <strong>
+          <a href="index.html">Challenge Tickets</a>
+        </strong>
+      </h3>
+      <hr />
+      <h4>Select an event</h4>
+      <hr />
+      <div className="row">
+        <div className="col-sm-3 event-list"> <a href="event.html">
+          <img src="https://cdn.boletius.com/images/1521202649764-test-pos-DA32F77A-C542-41B7-81C4-43091924255B.jpeg" width="100%" />
+        </a>
+        </div>
+        <div className="col-sm-3 event-list">
+          <a href="event.html">
+            <img src="https://cdn.boletius.com/images/1520277905667-test-pos-All_access_640x640-min.jpg" width="100%" />
+          </a>
+        </div>
+        <div className="col-sm-3 event-list">
+          <a href="event.html">
+            <img src="https://cdn.boletius.com/images/1519768708978-test-pos-rompiendo-cabezas-640-min.jpg" width="100%" />
+          </a>
+        </div>
+        <div className="col-sm-3 event-list">
+          <a href="event.html">
+            <img src="https://cdn.boletius.com/images/1519139052461-test-pos-BANN.jpg" width="100%" />
+          </a>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-sm-3 event-list"> <a href="event.html">
+          <img src="https://cdn.boletius.com/images/1521202649764-test-pos-DA32F77A-C542-41B7-81C4-43091924255B.jpeg" width="100%" />
+        </a>
+        </div>
+        <div className="col-sm-3 event-list">
+          <a href="event.html">
+            <img src="https://cdn.boletius.com/images/1520277905667-test-pos-All_access_640x640-min.jpg" width="100%" />
+          </a>
+        </div>
+        <div className="col-sm-3 event-list">
+          <a href="event.html">
+            <img src="https://cdn.boletius.com/images/1519768708978-test-pos-rompiendo-cabezas-640-min.jpg" width="100%" />
+          </a>
+        </div>
+        <div className="col-sm-3 event-list"> <a href="event.html">
+          <img src="https://cdn.boletius.com/images/1519139052461-test-pos-BANN.jpg" width="100%" />
+        </a>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-sm-3 event-list">
+          <a href="event.html">
+            <img src="https://cdn.boletius.com/images/1521202649764-test-pos-DA32F77A-C542-41B7-81C4-43091924255B.jpeg" width="100%" />
+          </a>
+        </div>
+        <div className="col-sm-3 event-list">
+          <a href="event.html"> <img src="https://cdn.boletius.com/images/1520277905667-test-pos-All_access_640x640-min.jpg" width="100%" />
+          </a>
+        </div>
+        <div className="col-sm-3 event-list">
+          <a href="event.html">
+            <img src="https://cdn.boletius.com/images/1519768708978-test-pos-rompiendo-cabezas-640-min.jpg" width="100%" />
+          </a>
+        </div>
+        <div className="col-sm-3 event-list">
+          <a href="event.html">
+            <img src="https://cdn.boletius.com/images/1519139052461-test-pos-BANN.jpg" width="100%" />
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
