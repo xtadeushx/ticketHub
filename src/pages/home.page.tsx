@@ -17,6 +17,7 @@ export const HomePage: FC<HomePageProps> = () => {
             </Layout>
         )
     }
+    
     return (
         <Layout>
             <h4>Select an event</h4>
