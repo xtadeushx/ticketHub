@@ -1,7 +1,7 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { GetEventsResponseDto } from './dto/get-events-response.dto'
-import { config } from '../core/config'
+import { config } from '../../../core/config'
 import { GetSingleEventResponseDto } from './dto/get-single-event-response.dto'
 import { GetSectorResponseDto } from './dto/get-sectors.-response.dto'
 

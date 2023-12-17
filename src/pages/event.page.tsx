@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { SingleEvent } from '../components/single-event.component';
+import { SingleEvent } from '../modules/events/components/single-event.component';
 import { Layout } from '../components/layout.component';
 
 interface EventPageProps {

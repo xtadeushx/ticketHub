@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useGetSingleEventQuery } from '../api/events';
 import { useParams } from 'react-router-dom';
-import { Layout } from './layout.component';
+import { Layout } from '../../../components/layout.component';
 
 interface SingleEventProps {
     // Define your props here

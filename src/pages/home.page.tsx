@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { EventList } from '../components/event-list.component';
+import { EventList } from '../modules/events/components/event-list.component';
 import { Layout } from '../components/layout.component';
-import { useGetEventsQuery } from '../api/events';
+import { useGetEventsQuery } from '../modules/events/api/events';
 
 interface HomePageProps {
     // Define your props here

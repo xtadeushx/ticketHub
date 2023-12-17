@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { eventsApi } from './api/events'
+import { eventsApi } from './modules/events/api/events'
 import { setupListeners } from '@reduxjs/toolkit/query';
 
 export const store = configureStore({
