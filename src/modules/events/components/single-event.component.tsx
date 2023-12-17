@@ -1,7 +1,10 @@
-import { FC } from 'react';
-import { useGetSingleEventQuery } from '../api/events';
+import React, { FC } from 'react';
+import { useGetSingleEventQuery, useLazyGetSectorsByEventQuery } from '../api/repository';
 import { useParams } from 'react-router-dom';
 import { Layout } from '../../../components/layout.component';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSelectedDate } from '../store/selectors';
+import { setEventDate } from '../store/slice';
 
 interface SingleEventProps {
     // Define your props here
@@ -9,13 +12,30 @@ interface SingleEventProps {
 
 export const SingleEvent: FC<SingleEventProps> = () => {
     const params = useParams();
-    const event = useGetSingleEventQuery(Number(params.id))
+
+    const event = useGetSingleEventQuery(Number(params.id));
+    const [triggerSectorsQuery, sectors] = useLazyGetSectorsByEventQuery();
+    console.log(sectors);
+
+    const dispatch = useDispatch();
+    const selectedDate = useSelector(getSelectedDate);
+
+
     if (event.isLoading) {
         return (
             <Layout>
                 <h2>Loading...</h2>
             </Layout>
         )
+    }
+
+    const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const eventId = Number(event.target.value);
+        dispatch(setEventDate(eventId));
+
+        if(!eventId) return;
+
+        triggerSectorsQuery(eventId)
     }
 
     return (
@@ -28,12 +48,17 @@ export const SingleEvent: FC<SingleEventProps> = () => {
             <div className="row">
                 <div className="col-sm-3">
                     <div className="form-group">
-                        <select name="" id="" className="form-control">
-                            <option value="">date</option>
+                        <select 
+                         className="form-control" 
+                         onChange={handleDateChange} 
+                         value={Number(selectedDate)}
+                         >
+                            <option value="null">date</option>
                             {event.data?.dates.map(date => (
                                 <option
                                     key={date.id}
-                                    value={date.date}>
+                                    value={date.id}       
+                                    >
                                     {date.date}
                                 </option>
                             ))}
@@ -42,22 +67,30 @@ export const SingleEvent: FC<SingleEventProps> = () => {
                 </div>
                 <div className="col-sm-3">
                     <div className="form-group">
-                        <select name="" id="" className="form-control" disabled>
+                        <select 
+                        className="form-control" 
+                        disabled = {!selectedDate}>
                             <option value="">Sector</option>
-                           
+                           {sectors.data?.map(sector=>(
+                            <option  key={`sector-${sector.id}`} value={sector.id}>{sector.name}</option>
+                           ))}
                         </select>
                     </div>
                 </div>
                 <div className="col-sm-2">
                     <div className="form-group">
-                        <select name="" id="" className="form-control" disabled>
+                        <select 
+                        className="form-control" 
+                        disabled>
                             <option value="">Rate</option>
                         </select>
                     </div>
                 </div>
                 <div className="col-sm-2">
                     <div className="form-group">
-                        <select name="" id="" className="form-control" disabled>
+                        <select 
+                        className="form-control" 
+                        disabled>
                             <option value="">Quantity</option>
                         </select>
                     </div>

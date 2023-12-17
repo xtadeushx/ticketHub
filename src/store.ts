@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { eventsApi } from './modules/events/api/events'
+import { eventsApi } from './modules/events/api/repository'
 import { setupListeners } from '@reduxjs/toolkit/query';
+import { eventDateReducer } from './modules/events/store/slice';
 
 export const store = configureStore({
   reducer: {
+    eventOrder : eventDateReducer,
     [eventsApi.reducerPath]: eventsApi.reducer,
   },
 

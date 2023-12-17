@@ -15,7 +15,7 @@ export const eventsApi = createApi({
     getSingleEvent: builder.query<GetSingleEventResponseDto, number>({
       query: (id) => `/api/event/${id}`
     }),
-    getSectorEvent: builder.query<GetSectorResponseDto, number>({
+    getSectorsByEvent: builder.query<GetSectorResponseDto, number>({
       query: (dateId) => `api/eventDate/${dateId}/sectors`
     }),
   }),
@@ -26,4 +26,4 @@ export const eventsApi = createApi({
 export const { 
   useGetEventsQuery, 
   useGetSingleEventQuery, 
-  useLazyGetSingleEventQuery} = eventsApi
+  useLazyGetSectorsByEventQuery} = eventsApi
