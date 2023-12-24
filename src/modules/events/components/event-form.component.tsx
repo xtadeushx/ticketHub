@@ -65,6 +65,7 @@ export const EventForm: FC<EventFormProps> = () => {
     const quantity = Number(event.target.value);
     dispatch(setEventQuantity(quantity));
   };
+
   return (
     <div className="row">
       <div className="col-sm-3">
