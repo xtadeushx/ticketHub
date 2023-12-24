@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import { useGetSingleEventQuery, useLazyGetSectorsByEventQuery } from '../api/repository';
+import { useGetSingleEventQuery, useLazyGetRatesBySectorIdQuery, useLazyGetSectorsByEventQuery } from '../api/repository';
 import { useParams } from 'react-router-dom';
 import { Layout } from '../../../components/layout.component';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSelectedDate, getSelectedSector } from '../store/selectors';
-import { setEventDate, setEventSector } from '../store/slice';
+import { getSelectedDate, getSelectedRate, getSelectedSector } from '../store/selectors';
+import { setEventDate, setEventRate, setEventSector } from '../store/slice';
 
 interface SingleEventProps {
     // Define your props here
@@ -15,11 +15,13 @@ export const SingleEvent: FC<SingleEventProps> = () => {
 
     const event = useGetSingleEventQuery(Number(params.id));
     const [triggerSectorsQuery, sectors] = useLazyGetSectorsByEventQuery();
-    console.log(sectors);
+    const [triggerRatesQuery, rates] = useLazyGetRatesBySectorIdQuery();
+    console.log("rates", rates);
 
     const dispatch = useDispatch();
     const selectedDate = useSelector(getSelectedDate);
     const selectedSector = useSelector(getSelectedSector);
+    const selectedRate = useSelector(getSelectedRate);
 
 
     if (event.isLoading) {
@@ -42,6 +44,16 @@ export const SingleEvent: FC<SingleEventProps> = () => {
     const handleSectorChange = (event: React.ChangeEvent<HTMLSelectElement>)=>{
         const sectorId = Number(event.target.value);
         dispatch(setEventSector(sectorId));
+
+
+        if(!sectorId) return;
+
+        triggerRatesQuery(sectorId)
+    };
+
+    const handleRateChange = (event: React.ChangeEvent<HTMLSelectElement>)=>{
+        const rateId = Number(event.target.value);
+        dispatch(setEventRate(rateId));
     };
 
     return (
@@ -89,8 +101,14 @@ export const SingleEvent: FC<SingleEventProps> = () => {
                     <div className="form-group">
                         <select 
                         className="form-control" 
-                        disabled = {!selectedSector}>
+                        onChange={handleRateChange} 
+                        value={Number(selectedRate)}
+                        disabled = {!selectedSector}
+                        >
                             <option value="">Rate</option>
+                            {rates.data?.map(rate=>(
+                            <option  key={`rate-${rate.id}`} value={rate.id}>{rate.name}</option>
+                           ))}
                         </select>
                     </div>
                 </div>
@@ -98,7 +116,8 @@ export const SingleEvent: FC<SingleEventProps> = () => {
                     <div className="form-group">
                         <select 
                         className="form-control" 
-                        disabled>
+                        disabled = {!selectedRate}
+                        >
                             <option value="">Quantity</option>
                         </select>
                     </div>

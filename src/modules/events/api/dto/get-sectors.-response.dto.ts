@@ -1,6 +1,8 @@
-export type GetSectorResponseDto = Sector[];
+export type GetSectorResponseDto = Rate[];
 
-export interface Sector {
+export interface Rate {
   id: number;
-  name: string;
+  max: number;
+  price: number;
+  name: string
 }

@@ -4,6 +4,7 @@ import { GetEventsResponseDto } from './dto/get-events-response.dto'
 import { config } from '../../../core/config'
 import { GetSingleEventResponseDto } from './dto/get-single-event-response.dto'
 import { GetSectorResponseDto } from './dto/get-sectors.-response.dto'
+import { GetRatesResponseDto } from './dto/get-rayes.-response.dto'
 
 export const eventsApi = createApi({
   reducerPath: 'eventsApi',
@@ -18,7 +19,10 @@ export const eventsApi = createApi({
     getSectorsByEvent: builder.query<GetSectorResponseDto, number>({
       query: (dateId) => `api/eventDate/${dateId}/sectors`
     }),
-  }),
+    getRatesBySectorId: builder.query<GetRatesResponseDto, number>({
+      query: (sectorId) => `api/sectors/${sectorId}/rates`
+    }),
+  })
 })
 
 // Export hooks for usage in functional components, which are
@@ -26,4 +30,6 @@ export const eventsApi = createApi({
 export const { 
   useGetEventsQuery, 
   useGetSingleEventQuery, 
-  useLazyGetSectorsByEventQuery} = eventsApi
+  useLazyGetSectorsByEventQuery,
+  useLazyGetRatesBySectorIdQuery
+} = eventsApi
