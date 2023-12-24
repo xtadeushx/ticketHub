@@ -1,27 +1,26 @@
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface EventOrderState {
-  date: number | null,
-  sector: number | null,
-  rate: number | null,
-  quantity: number | null,
+  date: number | null;
+  sector: number | null;
+  rate: number | null;
+  quantity: number | null;
 }
 
 const initialState: EventOrderState = {
   date: null,
   sector: null,
   rate: null,
-  quantity: null
-}
+  quantity: null,
+};
 
 export const eventOrderSlice = createSlice({
-  name: 'eventOrder',
+  name: "eventOrder",
   initialState,
   reducers: {
     setEventDate: (state, action: PayloadAction<number>) => {
       state.date = action.payload;
-
     },
     setEventSector: (state, action: PayloadAction<number>) => {
       state.sector = action.payload;
@@ -33,9 +32,10 @@ export const eventOrderSlice = createSlice({
       state.quantity = action.payload;
     },
   },
-})
+});
 
 // Action creators are generated for each case reducer function
-export const { setEventDate, setEventSector, setEventRate, setEventQuantity } = eventOrderSlice.actions
+export const { setEventDate, setEventSector, setEventRate, setEventQuantity } =
+  eventOrderSlice.actions;
 
-export const { reducer: eventDateReducer } = eventOrderSlice
+export const { reducer: eventDateReducer } = eventOrderSlice;

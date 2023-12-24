@@ -1,18 +1,87 @@
 module.exports = {
-  root: true,
-  env: { browser: true, es2020: true },
+  env: {
+    browser: true,
+    es2021: true,
+  },
   extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:react-hooks/recommended',
+    "standard-with-typescript",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
-  parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
+  overrides: [
+    {
+      env: {
+        node: true,
+      },
+      files: [".eslintrc.{js,cjs}"],
+      parserOptions: {
+        sourceType: "script",
+      },
+    },
+  ],
+  parserOptions: {
+    ecmaVersion: "latest",
+    sourceType: "module",
+    project: "./tsconfig.json",
+    tsconfigRootDir: __dirname,
+  },
+  plugins: ["react", "@typescript-eslint", "prettier"],
+  settings: {
+    react: {
+      version: "detect",
+    },
+  },
   rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "auto",
+      },
+    ],
+
+    "@typescript-eslint/quotes": ["error", "double"],
+    /*"@typescript-eslint/indent": ["error", 2],
+       "@typescript-eslint/member-delimiter-style": [
+      "error",
+      {
+        multiline: {
+          delimiter: "semi",
+          requireLast: true,
+        },
+        singleline: {
+          delimiter: "semi",
+          requireLast: true,
+        },
+      },
+    ], */
+    "@typescript-eslint/semi": ["error", "always"],
+    "react/react-in-jsx-scope": "off",
+    "@typescript-eslint/comma-dangle": ["error", "always-multiline"],
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      { prefer: "type-imports", disallowTypeAnnotations: false },
+    ],
+    "@typescript-eslint/triple-slash-reference": [
+      "error",
+      { types: "prefer-import" },
+    ],
+    "react/display-name": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        selector: "variable",
+        format: null,
+      },
+    ],
+    "@typescript-eslint/no-confusing-void-expression": [
+      "off",
+      {
+        allowArrowShorthand: true,
+        ignoreVoidOperator: true,
+      },
     ],
   },
-}
+  ignorePatterns: [".eslintrc.cjs"],
+};
