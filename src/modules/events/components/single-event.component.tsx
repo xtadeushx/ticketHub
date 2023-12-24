@@ -3,8 +3,8 @@ import { useGetSingleEventQuery, useLazyGetSectorsByEventQuery } from '../api/re
 import { useParams } from 'react-router-dom';
 import { Layout } from '../../../components/layout.component';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSelectedDate } from '../store/selectors';
-import { setEventDate } from '../store/slice';
+import { getSelectedDate, getSelectedSector } from '../store/selectors';
+import { setEventDate, setEventSector } from '../store/slice';
 
 interface SingleEventProps {
     // Define your props here
@@ -19,6 +19,7 @@ export const SingleEvent: FC<SingleEventProps> = () => {
 
     const dispatch = useDispatch();
     const selectedDate = useSelector(getSelectedDate);
+    const selectedSector = useSelector(getSelectedSector);
 
 
     if (event.isLoading) {
@@ -36,7 +37,12 @@ export const SingleEvent: FC<SingleEventProps> = () => {
         if(!eventId) return;
 
         triggerSectorsQuery(eventId)
-    }
+    };
+
+    const handleSectorChange = (event: React.ChangeEvent<HTMLSelectElement>)=>{
+        const sectorId = Number(event.target.value);
+        dispatch(setEventSector(sectorId));
+    };
 
     return (
         <>
@@ -69,6 +75,8 @@ export const SingleEvent: FC<SingleEventProps> = () => {
                     <div className="form-group">
                         <select 
                         className="form-control" 
+                        onChange={handleSectorChange} 
+                        value={Number(selectedSector)}
                         disabled = {!selectedDate}>
                             <option value="">Sector</option>
                            {sectors.data?.map(sector=>(
@@ -81,7 +89,7 @@ export const SingleEvent: FC<SingleEventProps> = () => {
                     <div className="form-group">
                         <select 
                         className="form-control" 
-                        disabled>
+                        disabled = {!selectedSector}>
                             <option value="">Rate</option>
                         </select>
                     </div>
