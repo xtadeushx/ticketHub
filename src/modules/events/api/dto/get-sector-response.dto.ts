@@ -1,4 +1,4 @@
-export type GetRatesResponseDto = Sector[];
+export type GetSectorsResponseDto = Sector[];
 
 export interface Sector {
   id: number;

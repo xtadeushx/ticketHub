@@ -28,7 +28,6 @@ export const EventForm: FC<EventFormProps> = () => {
   const event = useGetSingleEventQuery(Number(params.id));
   const [triggerSectorsQuery, sectors] = useLazyGetSectorsByEventQuery();
   const [triggerRatesQuery, rates] = useLazyGetRatesBySectorIdQuery();
-  console.log("rates", rates);
 
   const dispatch = useDispatch();
   const selectedDate = useSelector(getSelectedDate);
@@ -56,7 +55,9 @@ export const EventForm: FC<EventFormProps> = () => {
 
   const handleRateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const rateId = Number(event.target.value);
-    dispatch(setEventRate(rateId));
+    const maxQuantity =
+      rates?.data?.find((rate) => rateId === rate.id)?.max || 0;
+    dispatch(setEventRate({ id: rateId, max: maxQuantity || 0 }));
   };
 
   const handleQuantityChange = (
@@ -112,7 +113,7 @@ export const EventForm: FC<EventFormProps> = () => {
             <option value="">Rate</option>
             {rates.data?.map((rate) => (
               <option key={`rate-${rate.id}`} value={rate.id}>
-                {rate.name}
+                {rate.name} | {rate.price}
               </option>
             ))}
           </select>
