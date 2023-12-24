@@ -247,5 +247,33 @@ rest.get("api/sectors/:sectorId/rates",  (req, res, ctx) =>{
       ]
       )
    )
- })
+ }),
+ rest.get("api/sectors/:sectorId/rates",  (req, res, ctx) =>{
+   return res(
+     ctx.delay(500),
+      ctx.status(200),
+      ctx.json(
+       [
+         {
+            "id":1,
+            "max":4,
+            "price":931.0,
+            "name":"Jubilado"
+         },
+         {
+            "id":3,
+            "max":4,
+            "price":476.0,
+            "name":"Menor"
+         },
+         {
+            "id":2,
+            "max":4,
+            "price":640.0,
+            "name":"Adulto"
+         }
+      ]
+      )
+   )
+ }),
 ]

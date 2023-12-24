@@ -3,8 +3,8 @@ import { useGetSingleEventQuery, useLazyGetRatesBySectorIdQuery, useLazyGetSecto
 import { useParams } from 'react-router-dom';
 import { Layout } from '../../../components/layout.component';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSelectedDate, getSelectedRate, getSelectedSector } from '../store/selectors';
-import { setEventDate, setEventRate, setEventSector } from '../store/slice';
+import { getSelectedDate, getSelectedQuantity, getSelectedRate, getSelectedSector } from '../store/selectors';
+import { setEventDate, setEventQuantity, setEventRate, setEventSector } from '../store/slice';
 
 interface SingleEventProps {
     // Define your props here
@@ -22,6 +22,7 @@ export const SingleEvent: FC<SingleEventProps> = () => {
     const selectedDate = useSelector(getSelectedDate);
     const selectedSector = useSelector(getSelectedSector);
     const selectedRate = useSelector(getSelectedRate);
+    const selectedQuntity = useSelector(getSelectedQuantity);
 
 
     if (event.isLoading) {
@@ -56,6 +57,11 @@ export const SingleEvent: FC<SingleEventProps> = () => {
         dispatch(setEventRate(rateId));
     };
 
+    const handleQuantityChange = (event: React.ChangeEvent<HTMLSelectElement>)=>{
+        const quantity = Number(event.target.value);
+        dispatch(setEventQuantity(quantity));
+    };
+
     return (
         <>
             <h4>{event.data?.name}</h4>
@@ -88,7 +94,7 @@ export const SingleEvent: FC<SingleEventProps> = () => {
                         <select 
                         className="form-control" 
                         onChange={handleSectorChange} 
-                        value={Number(selectedSector)}
+                        value={String(selectedSector)}
                         disabled = {!selectedDate}>
                             <option value="">Sector</option>
                            {sectors.data?.map(sector=>(
@@ -102,7 +108,7 @@ export const SingleEvent: FC<SingleEventProps> = () => {
                         <select 
                         className="form-control" 
                         onChange={handleRateChange} 
-                        value={Number(selectedRate)}
+                        value={String(selectedRate)}
                         disabled = {!selectedSector}
                         >
                             <option value="">Rate</option>
@@ -115,10 +121,17 @@ export const SingleEvent: FC<SingleEventProps> = () => {
                 <div className="col-sm-2">
                     <div className="form-group">
                         <select 
-                        className="form-control" 
+                        className="form-control"
+                        onChange={handleQuantityChange} 
+                        value={String(selectedQuntity)} 
                         disabled = {!selectedRate}
                         >
                             <option value="">Quantity</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
                         </select>
                     </div>
                 </div>
