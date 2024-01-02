@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import {
   useGetSingleEventQuery,
   useLazyGetRatesBySectorIdQuery,
@@ -67,6 +67,11 @@ export const EventForm: FC<EventFormProps> = () => {
     dispatch(setEventQuantity(quantity));
   };
 
+  const quantityOptions = useMemo(
+    () => new Array(selectedRate?.max || 0).fill(0),
+    [selectedRate?.max],
+  );
+
   return (
     <div className="row">
       <div className="col-sm-3">
@@ -107,7 +112,7 @@ export const EventForm: FC<EventFormProps> = () => {
           <select
             className="form-control"
             onChange={handleRateChange}
-            value={String(selectedRate)}
+            value={String(selectedRate?.id)}
             disabled={!selectedSector}
           >
             <option value="">Rate</option>
@@ -128,11 +133,14 @@ export const EventForm: FC<EventFormProps> = () => {
             disabled={!selectedRate}
           >
             <option value="">Quantity</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
+            {quantityOptions.map((_, index) => (
+              <option
+                key={`quantity-${selectedRate?.id}-${index}`}
+                value={index + 1}
+              >
+                {index + 1}
+              </option>
+            ))}
           </select>
         </div>
       </div>
