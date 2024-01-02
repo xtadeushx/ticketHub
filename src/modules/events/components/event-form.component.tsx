@@ -38,8 +38,13 @@ export const EventForm: FC<EventFormProps> = () => {
   const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const eventId = Number(event.target.value);
     dispatch(setEventDate(eventId));
+    dispatch(setEventSector(null));
+    dispatch(setEventRate(null));
+    dispatch(setEventQuantity(null));
 
-    if (!eventId) return;
+    if (!eventId) {
+      return;
+    }
 
     triggerSectorsQuery(eventId);
   };
@@ -47,8 +52,12 @@ export const EventForm: FC<EventFormProps> = () => {
   const handleSectorChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const sectorId = Number(event.target.value);
     dispatch(setEventSector(sectorId));
+    dispatch(setEventRate(null));
+    dispatch(setEventQuantity(null));
 
-    if (!sectorId) return;
+    if (!sectorId) {
+      return;
+    }
 
     triggerRatesQuery(sectorId);
   };
@@ -58,6 +67,7 @@ export const EventForm: FC<EventFormProps> = () => {
     const maxQuantity =
       rates?.data?.find((rate) => rateId === rate.id)?.max || 0;
     dispatch(setEventRate({ id: rateId, max: maxQuantity || 0 }));
+    dispatch(setEventQuantity(null));
   };
 
   const handleQuantityChange = (
