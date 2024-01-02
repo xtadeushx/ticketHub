@@ -4,7 +4,7 @@ import {
   useLazyGetRatesBySectorIdQuery,
   useLazyGetSectorsByEventQuery,
 } from "../api/repository";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getSelectedDate,
@@ -24,6 +24,7 @@ interface EventFormProps {
 
 export const EventForm: FC<EventFormProps> = () => {
   const params = useParams();
+  const navigate = useNavigate();
 
   const event = useGetSingleEventQuery(Number(params.id));
   const [triggerSectorsQuery, sectors] = useLazyGetSectorsByEventQuery();
@@ -157,6 +158,7 @@ export const EventForm: FC<EventFormProps> = () => {
       <div className="col-sm-2">
         <button
           className="btn btn-primary btn-block"
+          onClick={() => navigate("/order")}
           disabled={
             !selectedDate ||
             !selectedSector ||

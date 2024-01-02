@@ -1,9 +1,11 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useGetSingleEventQuery } from "../api/repository";
 import { useParams } from "react-router-dom";
 import { Layout } from "../../../components/layout.component";
 import { EventForm } from "./event-form.component";
 import { EventList } from "./event-list.component";
+import { useDispatch } from "react-redux";
+import { setEventId } from "../store/slice";
 
 interface SingleEventProps {
   // Define your props here
@@ -11,7 +13,13 @@ interface SingleEventProps {
 
 export const SingleEvent: FC<SingleEventProps> = () => {
   const params = useParams();
-  const event = useGetSingleEventQuery(Number(params.id));
+  const eventId = Number(params.id);
+  const event = useGetSingleEventQuery(eventId);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setEventId(eventId));
+  }, []);
 
   if (event.isLoading) {
     return (
