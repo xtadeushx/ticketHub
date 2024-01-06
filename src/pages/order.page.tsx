@@ -4,6 +4,10 @@ import { getSelectedEventId } from "../modules/events/store/selectors";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useGetSingleEventQuery } from "../modules/events/api/repository";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "../components/input.component";
 
 interface OrderPageProps {
   // Define your props here
@@ -12,6 +16,19 @@ interface OrderPageProps {
 export const OrderPage: FC<OrderPageProps> = ({}) => {
   const navigate = useNavigate();
   const chosenEventId = useSelector(getSelectedEventId);
+
+  const detailsSchema = z.object({
+    name: z.string().min(3),
+    email: z.string().email(),
+    phone: z.string().min(10),
+    address: z.string().min(10),
+    cardHolderName: z.string().min(3),
+    cardNumber: z.string().min(13).max(16),
+    cardExpiration: z.string().min(5).max(5),
+    cardCw: z.string().min(3).max(3),
+  });
+
+  type DetailSchemaValues = z.infer<typeof detailsSchema>;
 
   useEffect(() => {
     if (!chosenEventId) {
@@ -23,88 +40,124 @@ export const OrderPage: FC<OrderPageProps> = ({}) => {
     skip: !chosenEventId,
   });
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<DetailSchemaValues>({
+    defaultValues: {
+      name: "",
+      email: "",
+      address: "",
+      phone: "",
+      cardHolderName: "",
+      cardNumber: "",
+      cardExpiration: "",
+      cardCw: "",
+    },
+    resolver: zodResolver(detailsSchema),
+  });
+
+  const onSubmit = handleSubmit((data) => {
+    console.log(data);
+  });
+
   return (
     <Layout>
       <h4>Buying tickets for {event.data?.name.toLocaleUpperCase()}</h4>
       <hr />
-      <div className="row">
-        <div className="col-sm-offset-1 col-sm-10">
-          <h4>
-            <strong>Your Details</strong>
-          </h4>
-          <hr />
-          <div className="row">
-            <div className="col-sm-6">
-              <div className="form-group">
-                <label htmlFor="">Name</label>
-                <input type="text" className="form-control" />
+      <form onSubmit={onSubmit} noValidate>
+        <div className="row">
+          <div className="col-sm-offset-1 col-sm-10">
+            <h4>
+              <strong>Your Details</strong>
+            </h4>
+            <hr />
+            <div className="row">
+              <div className="col-sm-6">
+                <Input
+                  label="Name"
+                  {...register("name")}
+                  error={errors.name?.message}
+                />
+              </div>
+              <div className="col-sm-6">
+                <Input
+                  label="Email"
+                  {...register("email")}
+                  type="email"
+                  error={errors.email?.message}
+                />
+              </div>
+              <div className="col-sm-6">
+                <Input
+                  label="Phone"
+                  {...register("phone")}
+                  error={errors.phone?.message}
+                />
+              </div>
+              <div className="col-sm-6">
+                <Input
+                  label="Address"
+                  {...register("address")}
+                  error={errors.address?.message}
+                />
               </div>
             </div>
-            <div className="col-sm-6">
-              <div className="form-group">
-                <label htmlFor="">Email</label>
-                <input type="text" className="form-control" />
+            <hr />
+            <h4>
+              <strong>Payment Details</strong>
+            </h4>
+            <hr />
+            <div className="row">
+              <div className="col-xs-12">
+                <Input
+                  label="Cardholder Name"
+                  {...register("cardHolderName")}
+                  error={errors.cardHolderName?.message}
+                />
               </div>
-            </div>
-            <div className="col-sm-6">
-              <div className="form-group">
-                <label htmlFor="">Phone</label>
-                <input type="text" className="form-control" />
+              <div className="col-sm-6">
+                <Input
+                  label="Card Number"
+                  {...register("cardNumber")}
+                  error={errors.cardNumber?.message}
+                />
               </div>
-            </div>
-            <div className="col-sm-6">
-              <div className="form-group">
-                <label htmlFor="">Address</label>
-                <input type="text" className="form-control" />
+              <div className="col-sm-4">
+                <Input
+                  label="Card Expiration"
+                  {...register("cardExpiration")}
+                  error={errors.cardExpiration?.message}
+                />
+              </div>
+              <div className="col-sm-2">
+                <Input
+                  label="CW"
+                  {...register("cardCw")}
+                  error={errors.cardCw?.message}
+                />
               </div>
             </div>
           </div>
-          <hr />
-          <h4>
-            <strong>Payment Details</strong>
-          </h4>
-          <hr />
-          <div className="row">
-            <div className="col-xs-12">
-              <div className="form-group">
-                <label htmlFor="">Cardholder Name</label>
-                <input type="text" className="form-control" />
-              </div>
-            </div>
-            <div className="col-sm-6">
-              <div className="form-group">
-                <label htmlFor="">Card Number</label>
-                <input type="text" className="form-control" />
-              </div>
-            </div>
-            <div className="col-sm-4">
-              <div className="form-group">
-                <label htmlFor="">Card Expiration</label>
-                <input type="text" className="form-control" />
-              </div>
-            </div>
-            <div className="col-sm-2">
-              <div className="form-group">
-                <label htmlFor="">CVV</label>
-                <input type="text" className="form-control" />
-              </div>
-            </div>
+        </div>
+        <hr />
+        <div className="row">
+          <div className="col-xs-6">
+            <button
+              onClick={() => navigate(-1)}
+              className="btn btn-default btn-block btn-lg"
+            >
+              Back
+            </button>
+          </div>
+          <div className="col-xs-6">
+            <button type="submit" className="btn btn-primary btn-block btn-lg">
+              Pay
+            </button>
           </div>
         </div>
-      </div>
-      <hr />
-      <div className="row">
-        <div className="col-xs-6">
-          <a href="event.html" className="btn btn-default btn-block btn-lg">
-            Back
-          </a>
-        </div>
-        <div className="col-xs-6">
-          <a href="success.html" className="btn btn-primary btn-block btn-lg">
-            Pay
-          </a>
-        </div>
-      </div>
+      </form>
       <hr />
     </Layout>
   );
