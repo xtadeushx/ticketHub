@@ -1,9 +1,16 @@
 import { FC, useEffect } from "react";
 import { Layout } from "../components/layout.component";
-import { getSelectedEventId } from "../modules/events/store/selectors";
+import {
+  getSelectedEventId,
+  getSelectedQuantity,
+  getSelectedRate,
+} from "../modules/events/store/selectors";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useGetSingleEventQuery } from "../modules/events/api/repository";
+import {
+  useCreateOrderMutation,
+  useGetSingleEventQuery,
+} from "../modules/events/api/repository";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,9 +36,11 @@ export const OrderPage: FC<OrderPageProps> = ({}) => {
   });
 
   type DetailSchemaValues = z.infer<typeof detailsSchema>;
+  const selectedRate = useSelector(getSelectedRate);
+  const selectedQuantity = useSelector(getSelectedQuantity);
 
   useEffect(() => {
-    if (!chosenEventId) {
+    if (!chosenEventId || !selectedRate || !selectedQuantity) {
       navigate("/", { replace: true });
     }
   }, []);
@@ -40,10 +49,12 @@ export const OrderPage: FC<OrderPageProps> = ({}) => {
     skip: !chosenEventId,
   });
 
+  const [createOrder] = useCreateOrderMutation();
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<DetailSchemaValues>({
     defaultValues: {
       name: "",
@@ -58,8 +69,26 @@ export const OrderPage: FC<OrderPageProps> = ({}) => {
     resolver: zodResolver(detailsSchema),
   });
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
+  const onSubmit = handleSubmit(async (data) => {
+    const [firstName, ...restName] = data.name.split(" ");
+    const lastName = restName.join(" ");
+
+    const order = await createOrder({
+      rate: selectedRate!.id,
+      quantity: selectedQuantity!,
+      card: {
+        nameOnCard: data.cardHolderName,
+        expires: data.cardExpiration,
+        number: data.cardNumber,
+        cvv: data.cardCw,
+      },
+      user: {
+        firstName,
+        lastName,
+        email: data.email,
+        phone: data.phone,
+      },
+    });
   });
 
   return (
@@ -152,7 +181,11 @@ export const OrderPage: FC<OrderPageProps> = ({}) => {
             </button>
           </div>
           <div className="col-xs-6">
-            <button type="submit" className="btn btn-primary btn-block btn-lg">
+            <button
+              type="submit"
+              className="btn btn-primary btn-block btn-lg"
+              disabled={isSubmitting}
+            >
               Pay
             </button>
           </div>
